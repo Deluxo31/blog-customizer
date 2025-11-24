@@ -4,6 +4,8 @@ import styles from './ArticleParamsForm.module.scss';
 import { useRef, useEffect } from 'react';
 import { RadioGroup } from 'src/ui/radio-group/RadioGroup';
 import { Select } from 'src/ui/select/Select';
+import { Separator } from 'src/ui/separator/Separator';
+import { Text } from 'src/ui/text';
 import {
 	ArticleStateType,
 	fontFamilyOptions,
@@ -85,31 +87,58 @@ export const ArticleParamsForm = ({
 					className={styles.form}
 					onSubmit={handleSubmit}
 					onReset={handleResetForm}>
-					<Select
-						selected={formState.fontFamilyOption}
-						options={fontFamilyOptions}
-						onChange={(option) => updateFormState('fontFamilyOption', option)}
-						title='ШРИФТ'
-					/>
-					<RadioGroup
-						name='font-size'
-						options={fontSizeOptions}
-						selected={formState.fontSizeOption}
-						onChange={(option) => updateFormState('fontSizeOption', option)}
-						title='РАЗМЕР ШРИФТА'
-					/>
-					<Select
-						selected={formState.fontColor}
-						options={fontColors}
-						onChange={(option) => updateFormState('fontColor', option)}
-						title='ЦВЕТ ШРИФТА'
-					/>
-					<Select
-						selected={formState.backgroundColor}
-						options={backgroundColors}
-						onChange={(option) => updateFormState('backgroundColor', option)}
-						title='ЦВЕТ ФОНА'
-					/>
+					<div className={styles.formItem}>
+						<Text
+							as={'div'}
+							size={31}
+							weight={800}
+							uppercase={true}
+							family={'open-sans'}>
+							Задайте параметры
+						</Text>
+					</div>
+
+					<div className={styles.formItem}>
+						<Select
+							selected={formState.fontFamilyOption}
+							options={fontFamilyOptions}
+							onChange={(option) => updateFormState('fontFamilyOption', option)}
+							title='ШРИФТ'
+						/>
+					</div>
+
+					<div className={styles.formItem}>
+						<RadioGroup
+							name='font-size'
+							options={fontSizeOptions}
+							selected={formState.fontSizeOption}
+							onChange={(option) => updateFormState('fontSizeOption', option)}
+							title='РАЗМЕР ШРИФТА'
+						/>
+					</div>
+
+					<div className={styles.formItem}>
+						<Select
+							selected={formState.fontColor}
+							options={fontColors}
+							onChange={(option) => updateFormState('fontColor', option)}
+							title='ЦВЕТ ШРИФТА'
+						/>
+					</div>
+
+					<div className={styles.formItem}>
+						<Separator />
+					</div>
+
+					<div className={styles.formItem}>
+						<Select
+							selected={formState.backgroundColor}
+							options={backgroundColors}
+							onChange={(option) => updateFormState('backgroundColor', option)}
+							title='ЦВЕТ ФОНА'
+						/>
+					</div>
+
 					<Select
 						selected={formState.contentWidth}
 						options={contentWidthArr}
