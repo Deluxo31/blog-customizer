@@ -87,57 +87,45 @@ export const ArticleParamsForm = ({
 					className={styles.form}
 					onSubmit={handleSubmit}
 					onReset={handleResetForm}>
-					<div className={styles.formItem}>
-						<Text
-							as={'div'}
-							size={31}
-							weight={800}
-							uppercase={true}
-							family={'open-sans'}>
-							Задайте параметры
-						</Text>
-					</div>
+					<Text
+						as={'div'}
+						size={31}
+						weight={800}
+						uppercase={true}
+						family={'open-sans'}>
+						Задайте параметры
+					</Text>
 
-					<div className={styles.formItem}>
-						<Select
-							selected={formState.fontFamilyOption}
-							options={fontFamilyOptions}
-							onChange={(option) => updateFormState('fontFamilyOption', option)}
-							title='ШРИФТ'
-						/>
-					</div>
+					<Select
+						selected={formState.fontFamilyOption}
+						options={fontFamilyOptions}
+						onChange={(option) => updateFormState('fontFamilyOption', option)}
+						title='ШРИФТ'
+					/>
 
-					<div className={styles.formItem}>
-						<RadioGroup
-							name='font-size'
-							options={fontSizeOptions}
-							selected={formState.fontSizeOption}
-							onChange={(option) => updateFormState('fontSizeOption', option)}
-							title='РАЗМЕР ШРИФТА'
-						/>
-					</div>
+					<RadioGroup
+						name='font-size'
+						options={fontSizeOptions}
+						selected={formState.fontSizeOption}
+						onChange={(option) => updateFormState('fontSizeOption', option)}
+						title='РАЗМЕР ШРИФТА'
+					/>
 
-					<div className={styles.formItem}>
-						<Select
-							selected={formState.fontColor}
-							options={fontColors}
-							onChange={(option) => updateFormState('fontColor', option)}
-							title='ЦВЕТ ШРИФТА'
-						/>
-					</div>
+					<Select
+						selected={formState.fontColor}
+						options={fontColors}
+						onChange={(option) => updateFormState('fontColor', option)}
+						title='ЦВЕТ ШРИФТА'
+					/>
 
-					<div className={styles.formItem}>
-						<Separator />
-					</div>
+					<Separator />
 
-					<div className={styles.formItem}>
-						<Select
-							selected={formState.backgroundColor}
-							options={backgroundColors}
-							onChange={(option) => updateFormState('backgroundColor', option)}
-							title='ЦВЕТ ФОНА'
-						/>
-					</div>
+					<Select
+						selected={formState.backgroundColor}
+						options={backgroundColors}
+						onChange={(option) => updateFormState('backgroundColor', option)}
+						title='ЦВЕТ ФОНА'
+					/>
 
 					<Select
 						selected={formState.contentWidth}
