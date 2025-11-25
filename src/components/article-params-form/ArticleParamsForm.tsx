@@ -1,12 +1,14 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import styles from './ArticleParamsForm.module.scss';
-import { useRef, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { RadioGroup } from 'src/ui/radio-group/RadioGroup';
 import { Select } from 'src/ui/select/Select';
 import { Separator } from 'src/ui/separator/Separator';
 import { Text } from 'src/ui/text';
 import {
+	defaultArticleState,
+	OptionType,
 	ArticleStateType,
 	fontFamilyOptions,
 	fontSizeOptions,
@@ -14,74 +16,65 @@ import {
 	backgroundColors,
 	contentWidthArr,
 } from 'src/constants/articleProps';
+import { useCloseOnOutsideClickOrEsc } from 'src/hooks/useCloseOnOutsideClickOrEsc';
 import clsx from 'clsx';
 
 type ArticleParamsFormProps = {
-	isOpen: boolean;
-	onToggle: () => void;
-	formState: ArticleStateType;
-	onFormChange: (newState: ArticleStateType) => void;
-	onApply: () => void;
-	onReset: () => void;
+	onApply: (state: ArticleStateType) => void;
+	onReset: (state: ArticleStateType) => void;
 };
 
 export const ArticleParamsForm = ({
-	isOpen,
-	onToggle,
-	formState,
-	onFormChange,
 	onApply,
 	onReset,
 }: ArticleParamsFormProps) => {
+	const [isFormOpen, setIsFormOpen] = useState(false);
+	const [currentFormState, setCurrentFormState] = useState(defaultArticleState);
 	const sidebarRef = useRef<HTMLElement>(null);
 
-	useEffect(() => {
-		const handleClickOutside = (e: MouseEvent) => {
-			if (!sidebarRef.current?.contains(e.target as Node) && isOpen) {
-				onToggle();
-			}
-		};
-		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && isOpen) {
-				onToggle();
-			}
-		};
+	useCloseOnOutsideClickOrEsc({
+		isOpenElement: isFormOpen,
+		onClose: () => setIsFormOpen(false),
+		elementRef: sidebarRef,
+	});
 
-		document.addEventListener('mousedown', handleClickOutside);
-		document.addEventListener('keydown', handleEscape);
-
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-			document.removeEventListener('mousedown', handleClickOutside);
+	const updateFormField = (field: keyof ArticleStateType) => {
+		return (value: OptionType) => {
+			setCurrentFormState((prevState) => ({
+				...prevState,
+				[field]: value,
+			}));
 		};
-	}, [isOpen, onToggle]);
+	};
+
+	const handleToggleForm = () => {
+		setIsFormOpen(!isFormOpen);
+	};
+
+	const handleCloseForm = () => {
+		setIsFormOpen(false);
+	};
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		onApply();
+		onApply(currentFormState);
+		handleCloseForm();
 	};
 
 	const handleResetForm = (e: React.FormEvent) => {
 		e.preventDefault();
-		onReset();
+		setCurrentFormState(defaultArticleState);
+		onReset(defaultArticleState);
+		handleCloseForm();
 	};
 
-	const updateFormState = (
-		key: keyof ArticleStateType,
-		value: ArticleStateType[keyof ArticleStateType]
-	) => {
-		onFormChange({
-			...formState,
-			[key]: value,
-		});
-	};
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={onToggle} />
+			<ArrowButton isOpen={isFormOpen} onClick={handleToggleForm} />
 			<aside
 				ref={sidebarRef}
 				className={clsx(styles.container, {
-					[styles.container_open]: isOpen,
+					[styles.container_open]: isFormOpen,
 				})}>
 				<form
 					className={styles.form}
@@ -97,40 +90,40 @@ export const ArticleParamsForm = ({
 					</Text>
 
 					<Select
-						selected={formState.fontFamilyOption}
+						selected={currentFormState.fontFamilyOption}
 						options={fontFamilyOptions}
-						onChange={(option) => updateFormState('fontFamilyOption', option)}
+						onChange={updateFormField('fontFamilyOption')}
 						title='ШРИФТ'
 					/>
 
 					<RadioGroup
 						name='font-size'
 						options={fontSizeOptions}
-						selected={formState.fontSizeOption}
-						onChange={(option) => updateFormState('fontSizeOption', option)}
+						selected={currentFormState.fontSizeOption}
+						onChange={updateFormField('fontSizeOption')}
 						title='РАЗМЕР ШРИФТА'
 					/>
 
 					<Select
-						selected={formState.fontColor}
+						selected={currentFormState.fontColor}
 						options={fontColors}
-						onChange={(option) => updateFormState('fontColor', option)}
+						onChange={updateFormField('fontColor')}
 						title='ЦВЕТ ШРИФТА'
 					/>
 
 					<Separator />
 
 					<Select
-						selected={formState.backgroundColor}
+						selected={currentFormState.backgroundColor}
 						options={backgroundColors}
-						onChange={(option) => updateFormState('backgroundColor', option)}
+						onChange={updateFormField('backgroundColor')}
 						title='ЦВЕТ ФОНА'
 					/>
 
 					<Select
-						selected={formState.contentWidth}
+						selected={currentFormState.contentWidth}
 						options={contentWidthArr}
-						onChange={(option) => updateFormState('contentWidth', option)}
+						onChange={updateFormField('contentWidth')}
 						title='ШИРИНА КОНТЕНТА'
 					/>
 					<div className={styles.bottomContainer}>
